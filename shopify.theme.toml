@@ -1,0 +1,2 @@
+[environments.development]
+store = "https://product-card-task.myshopify.com/"

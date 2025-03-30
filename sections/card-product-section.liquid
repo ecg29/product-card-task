@@ -1,0 +1,27 @@
+{% assign card_product = product %}
+{% render 'card-product',
+  card_product: card_product,
+  media_aspect_ratio: settings.card_product_swatch_image_ratio,
+  image_shape: settings.card_product_swatch_image_shape,
+  show_secondary_image: settings.card_product_swatch_show_secondary_image,
+  show_vendor: settings.card_product_swatch_show_vendor,
+  show_rating: settings.card_product_swatch_show_rating,
+  lazy_load: true,
+  skip_styles: false,
+  quick_add: settings.card_product_swatch_quick_add,
+  section_id: section.id,
+  card_product_user_selected: true
+%}
+
+{% schema %}
+{
+  "name": "Card Product Ajax",
+  "tag": "section",
+  "class": "section",
+  "presets": [
+    {
+      "name": "Card Product Ajax"
+    }
+  ]
+}
+{% endschema %}

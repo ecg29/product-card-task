@@ -1,0 +1,58 @@
+{% if card_product.options_with_values.size > 0 %}
+    {% for option in card_product.options_with_values %}
+      {% assign swatch_count = option.values | map: 'swatch' | compact | size %}
+      {% if swatch_count > 0 %}
+        <fieldset class="js product-card-swatch product-form__input product-form__input--swatch">
+          {% if settings.card_product_swatch_show_option_name %}
+            <legend class="form__label">{{ option.name }}</legend>
+          {% endif %}
+          <div style="line-height: 0;">
+            {% for value in option.values %}
+              {% if value.swatch %}
+                {% assign option_position = option.position %}
+                {% assign option_disabled = true %}
+                {% assign matched_variant_id = blank %}
+                
+                {% for variant in card_product.variants %}
+                  {% if option_position == 1 and variant.option1 == value and variant.available %}
+                    {% assign matched_variant_id = variant.id %}
+                    {% assign option_disabled = false %}
+                    {% break %}
+                  {% elsif option_position == 2 and variant.option2 == value and variant.available %}
+                    {% assign matched_variant_id = variant.id %}
+                    {% assign option_disabled = false %}
+                    {% break %}
+                  {% elsif option_position == 3 and variant.option3 == value and variant.available %}
+                    {% assign matched_variant_id = variant.id %}
+                    {% assign option_disabled = false %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+                
+                {% capture input_id %}
+                  card-swatch-{{ option.name | handleize }}-{{ forloop.index0 }}-{{ card_product.id }}
+                {% endcapture %}
+                
+                <input
+                  type="radio"
+                  class="swatch-input__input card-swatch{% if option_disabled %} disabled{% endif %}"
+                  id="{{ input_id }}"
+                  name="card-swatch-{{ card_product.id }}-{{ option.name | handleize }}"
+                  {% if option_disabled %} disabled{% endif %}
+                  data-product-handle="{{ card_product.handle }}"
+                  data-variant-id="{{ matched_variant_id }}"
+                  data-option-position="{{ option_position }}"
+                  data-swatch-value="{{ value }}"
+                >
+                
+                <label for="{{ input_id }}" class="swatch-input__label">
+                  {% render 'swatch', swatch: value.swatch, shape: settings.card_product_swatch_shape %}
+                </label>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </fieldset>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  
